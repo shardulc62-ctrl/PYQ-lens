@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PYQ Lens</title>
+<meta name="theme-color" content="#2D4BFF">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F2F5FC;--grid:rgba(45,75,255,.07);--card:#fff;--ink:#14204F;--mut:#55608C;--line:#D3DBF0;--accent:#2D4BFF;--onaccent:#fff;--phy:#2457E6;--che:#0B7F5F;--mat:#C74410;
+box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1330;--grid:rgba(140,160,255,.07);--card:#172046;--ink:#E9EDFF;--mut:#9CA7D8;--line:#2B3668;--accent:#8396FF;--onaccent:#0E1330;--phy:#80A8FF;--che:#3FD6A8;--mat:#FF9A6B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1330;--grid:rgba(140,160,255,.07);--card:#172046;--ink:#E9EDFF;--mut:#9CA7D8;--line:#2B3668;--accent:#8396FF;--onaccent:#0E1330;--phy:#80A8FF;--che:#3FD6A8;--mat:#FF9A6B;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font:16px/1.5 "Instrument Sans",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:28px 18px 56px}
+h1{font:800 clamp(2rem,9vw,2.8rem)/1 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 10px;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:0 0 22px;max-width:46ch}
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:190px;border:2px dashed var(--line);border-radius:20px;background:var(--card);cursor:pointer;overflow:hidden;text-align:center;padding:18px}
+.drop:focus-within{outline:3px solid var(--accent);outline-offset:3px}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop b{font:600 1.15rem "Bricolage Grotesque",sans-serif}
+.drop span{color:var(--mut);font-size:.9rem}
+.drop img{display:none;max-height:260px;max-width:100%;border-radius:12px}
+.drop.has img{display:block}.drop.has b,.drop.has span,.drop.has svg{display:none}
+.drop.has{border-style:solid;border-color:var(--accent)}
+.scan::after{content:"";position:absolute;left:0;right:0;height:3px;background:var(--accent);box-shadow:0 0 18px 4px var(--accent);animation:sweep 1.6s ease-in-out infinite alternate}
+@keyframes sweep{from{top:6%}to{top:94%}}
+@media (prefers-reduced-motion:reduce){.scan::after{animation:none;top:50%}}
+.row{display:flex;gap:10px;margin:16px 0}
+.seg{display:flex;flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px}
+.seg button{flex:1;border:0;background:none;color:var(--mut);font:600 .95rem "Instrument Sans",sans-serif;padding:10px 6px;border-radius:10px;min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--onaccent)}
+.go{width:100%;border:0;border-radius:14px;background:var(--accent);color:var(--onaccent);font:600 1.05rem "Instrument Sans",sans-serif;min-height:52px}
+.go:disabled{opacity:.45}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.msg{margin:18px 0;padding:14px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--mut)}
+.topic{margin:22px 0 0;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:18px;padding:16px}
+.topic h2{font:800 1.3rem/1.2 "Bricolage Grotesque",sans-serif;margin:2px 0 2px}
+.chap{color:var(--c);font-weight:600;font-size:.9rem}
+.q{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;font-size:.8rem;color:var(--mut);margin-bottom:4px}
+.meta i{font-style:normal;border:1px solid var(--line);border-radius:99px;padding:1px 9px}
+.q p{margin:0 0 8px;white-space:pre-wrap}
+.opts{margin:0 0 8px;padding:0;list-style:none;display:grid;gap:6px}
+.opts li{border:1px solid var(--line);border-radius:10px;padding:7px 11px}
+details{background:var(--bg);border-radius:10px;padding:8px 12px}
+summary{cursor:pointer;font-weight:600;min-height:28px}
+details p{margin:8px 0 0}
+.links{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.links a{color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:9px 15px;font-weight:600;font-size:.9rem;min-height:44px;display:inline-flex;align-items:center}
+.note{color:var(--mut);font-size:.82rem;margin-top:26px}
+.set{margin:0 0 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.set label{display:block;margin:12px 0 0;font-weight:600;font-size:.9rem}
+.set input[type=password],.set input[type=text]{width:100%;margin-top:6px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:400 1rem "Instrument Sans",sans-serif;min-height:46px}
+.set .seg{margin-top:10px}
+.hint{color:var(--mut);font-size:.85rem;margin:10px 0}
+.hint a{color:var(--accent);font-weight:600}
+.set .go{margin-top:6px}
+.srcs{margin-top:22px}.srcs h3{font:600 1rem "Bricolage Grotesque",sans-serif;margin:0}
+</style>
+</head>
+<body>
+<main>
+  <h1>PYQ Lens</h1>
+  <p class="sub">Snap or upload your JEE syllabus or notes. Get previous-year-style questions for every topic in it.</p>
+
+  <details class="set" id="set"><summary>AI settings</summary>
+    <div class="seg" role="group" aria-label="AI provider"><button type="button" data-p="gemini" aria-pressed="true">Gemini</button><button type="button" data-p="claude" aria-pressed="false">Claude</button></div>
+    <label>API key<input id="key" type="password" autocomplete="off" placeholder="Paste your key"></label>
+    <label>Model<input id="model" type="text" autocomplete="off" autocapitalize="off"></label>
+    <p class="hint" data-hint="gemini">Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a>. Gemini searches the web with Google, so many questions come from real past papers.</p>
+    <p class="hint" data-hint="claude" hidden>Get a key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">console.anthropic.com</a> (paid). Claude writes questions from past-paper patterns and does not search the web.</p>
+    <p class="hint">Your key stays in this browser and is sent only to Google or Anthropic.</p>
+    <button type="button" class="go" id="save">Save</button>
+  </details>
+
+  <label class="drop" id="drop">
+    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M8 12h8"/></svg>
+    <b>Add a photo of your notes</b>
+    <span>Tap to take a photo or pick from gallery</span>
+    <img id="prev" alt="Preview of your notes">
+    <input id="file" type="file" accept="image/*" aria-label="Upload notes image">
+  </label>
+
+  <div class="row">
+    <div class="seg" role="group" aria-label="Exam">
+      <button type="button" aria-pressed="true" data-e="JEE Main">JEE Main</button>
+      <button type="button" aria-pressed="false" data-e="JEE Advanced">JEE Advanced</button>
+    </div>
+  </div>
+  <button class="go" id="go" disabled>Find PYQs</button>
+
+  <div id="out" aria-live="polite"></div>
+  <p class="note">Answers can be wrong. Use the search links on each topic to confirm against the real papers.</p>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+let blob=null,exam="JEE Main",prov="gemini";
+const COL={Physics:"var(--phy)",Chemistry:"var(--che)",Mathematics:"var(--mat)"};
+const DEF={gemini:"gemini-2.5-flash",claude:"claude-sonnet-5-5"};
+const store={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function h(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function link(l,u){const a=h("a",null,l);a.href=u;a.target="_blank";a.rel="noopener noreferrer";return a}
+function say(t){$("#out").replaceChildren(h("div","msg",t))}
+function loadSet(){
+  $("#key").value=store.get("key_"+prov,"");$("#model").value=store.get("model_"+prov,DEF[prov]);
+  document.querySelectorAll("[data-p]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===prov));
+  document.querySelectorAll("[data-hint]").forEach(p=>p.hidden=p.dataset.hint!==prov);
+}
+prov=store.get("prov","gemini");loadSet();
+if(!store.get("key_"+prov,""))$("#set").open=true;
+document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{prov=b.dataset.p;loadSet()});
+$("#save").onclick=()=>{store.set("prov",prov);store.set("key_"+prov,$("#key").value.trim());store.set("model_"+prov,$("#model").value.trim()||DEF[prov]);$("#set").open=false;say("Saved. Add a photo of your notes and tap Find PYQs.")};
+document.querySelectorAll(".seg button[data-e]").forEach(b=>b.onclick=()=>{exam=b.dataset.e;document.querySelectorAll(".seg button[data-e]").forEach(o=>o.setAttribute("aria-pressed",o===b))});
+async function shrink(f){
+  try{const m=await createImageBitmap(f),s=Math.min(1,1600/Math.max(m.width,m.height)),c=document.createElement("canvas");
+  c.width=Math.round(m.width*s);c.height=Math.round(m.height*s);c.getContext("2d").drawImage(m,0,0,c.width,c.height);
+  return await new Promise(r=>c.toBlob(r,"image/jpeg",.85))}catch(e){return f}
+}
+$("#file").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  blob=await shrink(f);$("#prev").src=URL.createObjectURL(blob);
+  $("#drop").classList.add("has");$("#go").disabled=false;$("#out").replaceChildren();
+};
+const b64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(b)});
+async function post(url,opt){
+  const r=await fetch(url,opt),j=await r.json().catch(()=>({}));
+  if(!r.ok){const m=(j.error&&(j.error.message||j.error))||("Error "+r.status);const e=new Error(typeof m==="string"?m:JSON.stringify(m));e.status=r.status;throw e}
+  return j;
+}
+async function gemini(prompt,img,key,model){
+  const url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent?key="+encodeURIComponent(key);
+  const body=tools=>({method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:"image/jpeg",data:img}}]}],...(tools?{tools:[{google_search:{}}]}:{}),generationConfig:{maxOutputTokens:8000}})});
+  let j;try{j=await post(url,body(true))}catch(e){if(e.status===400||e.status===429)j=await post(url,body(false));else throw e}
+  const c=(j.candidates||[])[0]||{};
+  const text=((c.content||{}).parts||[]).map(p=>p.text||"").join("");
+  const src=(((c.groundingMetadata||{}).groundingChunks)||[]).map(g=>g.web).filter(Boolean);
+  return{text,src};
+}
+async function claude(prompt,img,key,model){
+  const j=await post("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model,max_tokens:6000,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:img}},{type:"text",text:prompt}]}]})});
+  return{text:(j.content||[]).map(p=>p.text||"").join(""),src:[]};
+}
+function parse(t){const a=t.indexOf("{"),z=t.lastIndexOf("}");if(a<0||z<a)throw new Error("parse");return JSON.parse(t.slice(a,z+1))}
+function render(d,src){
+  const out=$("#out");out.replaceChildren();
+  const ts=(d&&d.topics)||[];
+  if(!ts.length){say("I couldn’t find study topics in that image. Try a sharper, well-lit photo of the syllabus or notes.");return}
+  ts.forEach(t=>{
+    const s=h("section","topic");s.style.setProperty("--c",COL[t.subject]||"var(--accent)");
+    s.append(h("div","chap",[t.subject,t.chapter].filter(Boolean).join(" · ")),h("h2",null,t.topic||t.chapter||"Topic"));
+    (t.qs||[]).forEach(q=>{
+      const b=h("div","q"),m=h("div","meta");
+      if(q.level)m.append(h("i",null,q.level));
+      if(q.year)m.append(h("i",null,q.year));
+      b.append(m,h("p",null,q.q));
+      if(q.opts&&q.opts.length){const u=h("ul","opts");q.opts.forEach((o,i)=>u.append(h("li",null,"ABCD"[i]+")  "+String(o).replace(/^\(?[A-Da-d1-4][).]\s*/,""))));b.append(u)}
+      const d=document.createElement("details");d.append(h("summary",null,"Show answer and hint"),h("p",null,"Answer: "+(q.ans||"—")),h("p",null,q.hint||""));
+      b.append(d);s.append(b);
+    });
+    const k=h("div","links"),topic=t.topic||t.chapter||"";
+    k.append(link("Search real PYQs","https://www.google.com/search?q="+encodeURIComponent(exam+" previous year questions "+topic)),link("Video solutions","https://www.youtube.com/results?search_query="+encodeURIComponent(exam+" PYQ "+topic)));
+    s.append(k);out.append(s);
+  });
+  if(src&&src.length){const w=h("div","srcs"),k=h("div","links");w.append(h("h3",null,"Web sources used"));
+    src.slice(0,6).forEach(g=>{if(g.uri)k.append(link(g.title||g.uri,g.uri))});w.append(k);out.append(w)}
+}
+$("#go").onclick=async()=>{
+  if(!blob)return;
+  const key=store.get("key_"+prov,""),model=store.get("model_"+prov,DEF[prov]);
+  if(!key){$("#set").open=true;say("Add your API key in AI settings first.");return}
+  $("#go").disabled=true;$("#drop").classList.add("scan");say("Reading your notes and finding questions…");
+  const web=prov==="gemini";
+  const prompt=`You are a JEE tutor. The image is a JEE syllabus page or a student's notes. Identify up to 5 distinct topics it covers. For each topic give 3 ${exam} previous-year questions of rising difficulty. ${web?"Use Google Search to find real questions from past papers and prefer them over invented ones. ":"Write questions in the style of past papers. "}Rules: plain unicode math only (x², √, ∫, →), no LaTeX; set year to a value like "JEE Main 2021" only if you are certain the question is a real past one, otherwise ""; each question under 50 words; opts is 4 option strings for MCQ or [] for numerical; ans is short; hint is one sentence. Return ONLY JSON: {"topics":[{"subject":"Physics|Chemistry|Mathematics","chapter":"","topic":"","qs":[{"q":"","opts":[],"ans":"","hint":"","year":"","level":"Easy|Medium|Hard"}]}]}. If the image is unreadable or not study material, return {"topics":[]}.`;
+  try{
+    const r=await(web?gemini:claude)(prompt,await b64(blob),key,model);
+    render(parse(r.text),r.src);
+  }catch(e){
+    const s=e.status;
+    say(e.message==="parse"?"The reply wasn’t readable. Tap Find PYQs to try again.":
+      s===401||s===403||/api key/i.test(e.message)?"Your API key was rejected. Check it in AI settings.":
+      s===404?"That model name wasn’t found. Change it in AI settings.":
+      s===429?"Rate limit reached. Wait a minute and try again.":
+      e instanceof TypeError?"Couldn’t reach the service. Check your internet. If you opened this as a local file, host it online instead (see the steps).":
+      "Something went wrong: "+e.message);
+  }finally{$("#go").disabled=false;$("#drop").classList.remove("scan")}
+};
+</script>
+</body>
+</html>
